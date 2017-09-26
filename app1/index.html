@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+    <head>
+         <!-- Latest compiled and minified CSS -->
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+
+        <!-- jQuery library -->
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+
+        <!-- Latest compiled JavaScript -->
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script> 
+        
+        <style>
+            #template{
+                display:none;
+            }
+            .complete{
+                color:green;
+            }
+            .incomplete{
+                color:yellow;
+            }
+        </style>
+        
+        <title> </title>
+    </head>
+    <body>
+        <div id = "template" class="panel panel-default hidden">
+            <div class="panel-heading">
+                <h3 class="panel-title">Panel title</h3>
+            </div>
+            <div class="panel-body">
+                Panel content
+            </div>
+        </div>
+        <script>
+            $.get("https://data.cityofchicago.org/resource/cdmx-wzbz.json?&$limit=100", function(response){
+                //console.log(response);
+                $.each(response,function(i,v){
+                    console.log(v);
+                    //$("body").append("<p><strong>" + v.service_request_number + "</strong><ul><li>" + v.street_address + "</li><li>" + v.status + "</li></ul></p><br>");
+                    
+                    $("#template").clone().removeClass("hidden").attr("id","request" + i).appendTo("body");
+                    $("#request" + i).find( ".panel-title" ).text(v.service_request_number);
+                    //$("#request" + i).find( ".panel-body" ).text("");
+                    $("#request" + i).find( ".panel-body" ).html("<ul><li>" + v.street_address + "</li><li>" + v.status + "</li></ul>");
+                    
+                    if(v.status == "Completed" || v.status =="Completed - Dup"){
+                        $("#request" + i).addClass("complete");
+                    }
+                    if(v.status == "Incomplete" || v.status == "Open" || v.status == "Open - Dup"){
+                        $("#request" + i).addClass("incomplete");
+                    }
+                });
+            });
+        </script>
+    </body>
+</html>
