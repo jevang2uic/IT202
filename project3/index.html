@@ -30,13 +30,25 @@
     </head>
     <body>
       
-        <div id = "template" class="panel panel-default hidden">
-            <div class="panel-heading">
-                <h3 class="panel-title">Panel title</h3>
-            </div>
-            <div class="panel-body">
-                Panel content
-            </div>
+        <!--<div id = "template" class="panel panel-default hidden">-->
+        <!--    <div class="panel-heading">-->
+        <!--        <h3 class="panel-title">Panel title</h3>-->
+        <!--    </div>-->
+        <!--    <div class="panel-body">-->
+        <!--        Panel content-->
+        <!--    </div>-->
+        <!--</div>-->
+        
+        <div id = "template" class="card hidden">
+          <div class="card-header">
+            Quote
+          </div>
+          <div class="card-block">
+            <blockquote class="card-blockquote">
+              <!--<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer posuere erat a ante.</p>-->
+              <!--<footer>Someone famous in <cite title="Source Title">Source Title</cite></footer>-->
+            </blockquote>
+          </div>
         </div>
         
         <nav class="navbar navbar-expand-lg navbar-light bg-light">
@@ -154,11 +166,12 @@
               
               // searchStr = "https://data.cityofchicago.org/resource/cwig-ma7x.json?" + $.param(searchObj);
                   
-              console.log("initMap");
+              console.log($.param(searchObj));
               console.log("https://data.cityofchicago.org/resource/cwig-ma7x.json?" + $.param(searchObj));
               
               
               $.get("https://data.cityofchicago.org/resource/cwig-ma7x.json?" + $.param(searchObj), function(response){
+                // $("#screen2").html("<h2>Map: Results: " + response.length + "</h2><br>");
                 var map = new google.maps.Map(document.getElementById('map'), {
                   zoom: 11,
                   center: {lat: parseFloat(response[0].latitude), lng: parseFloat(response[0].longitude)}
@@ -168,7 +181,7 @@
                   //console.log(v);
                   //$("body").append("<p><strong>" + v.service_request_number + "</strong><ul><li>" + v.street_address + "</li><li>" + v.status + "</li></ul></p><br>");
                   var infowindow = new google.maps.InfoWindow({
-                    content: "<p><strong>" + v.inspection_id + "</strong><ul><li>" + v.location_address + "</li><li>" + v.results + "</li></ul></p><br>"
+                    content: "<p><strong>" + v.dba_name + "</strong><ul><li>" + v.address + "</li><li>" + v.inspection_id + "</li><li>" + v.results + "</li></ul></p><br>"
                   });
                   
                   var coord = {lat: parseFloat(v.latitude), lng: parseFloat(v.longitude)};
@@ -255,9 +268,9 @@
                           //$("body").append("<p><strong>" + v.service_request_number + "</strong><ul><li>" + v.street_address + "</li><li>" + v.status + "</li></ul></p><br>");
                           
                           $("#template").clone().removeClass("hidden").attr("id","request" + i).appendTo("#screen1");
-                          $("#request" + i).find( ".panel-title" ).text(v.dba_name);
+                          $("#request" + i).find( ".card-header" ).text(v.dba_name);
                           //$("#request" + i).find( ".panel-body" ).text("");
-                          $("#request" + i).find( ".panel-body" ).html("<ul><li>" + v.inspection_id + "</li><li>" + v.results + "</li></ul>");
+                          $("#request" + i).find( ".card-blockquote" ).html("<ul><li>" + v.inspection_id + "</li><li>" + v.results + "</li></ul>");
                           
                       });
                   });
