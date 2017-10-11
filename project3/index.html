@@ -81,67 +81,91 @@
         
         <div class="container screen" id="screen2"><h3>Map</h3><br><div id="map" style="height:1000px;width:100%;"></div></div>
         
-        
-        <div class="container screen jumbotron starter" id="input">
-          <h1 class="display-3">Chicago Food Inspection Search</h1>
-          <p class="lead">The City of Chicago's data on Food Inspections.</p>
-          <hr class="my-4">
-          <p>Use the inputs here to filter your search</p>
-          
-          <form>
-            <div>
-              <label for="date">InspectionDate:</label>
-              <br>
-              <input id="date" class="date" type="date">
-            </div>
-          </form>
-          
-          <br>
-          
-          <form>
-            <div>
-              <label for="facils">Facility Type:</label>
-              <br>
-              <input list="facils" id="facils-input">
-              <datalist id="facils">
-                <!--<option> test </option>-->
-              </datalist>
-            </div>
-          </form>
-          
-          <br>
-          
-          <form>
-            <div>
-              <label for="results">Inspection Results:</label>
-              <br>
-              <input list="results" id="results-input">
-              <datalist id="results">
-              </datalist>
-            </div>
-          </form>
-          
-          <br>
-          
-          <form>
-            <div>
-              <label for="zip">Zip Code:</label>
-              <br>
-              <input id="zip" class="zip" type="text">
-            </div>
-          </form>
-          
-          <br>
-         
-          <p class="lead">
-            <a class="btn btn-primary btn-lg" href="#" id="search" role="button">Search</a>
-          </p>
+        <div class="container screen starter"  id="input">
+          <div class="jumbotron">
+            <h1 class="display-3">Chicago Food Inspection Search</h1>
+            <p class="lead">The City of Chicago's data on Food Inspections.</p>
+            <hr class="my-4">
+            <p>Use the inputs here to filter your search</p>
+            
+            <form>
+              <div>
+                <label for="date">Inspection Date:</label>
+                <br>
+                <input id="date" class="date" type="date">
+              </div>
+            </form>
+            
+            <br>
+            
+            <form>
+              <div>
+                <label for="facils">Facility Type:</label>
+                <br>
+                <input list="facils" id="facils-input">
+                <datalist id="facils">
+                  <!--<option> test </option>-->
+                </datalist>
+              </div>
+            </form>
+            
+            <br>
+            
+            <form>
+              <div>
+                <label for="results">Inspection Results:</label>
+                <br>
+                <input list="results" id="results-input">
+                <datalist id="results">
+                </datalist>
+              </div>
+            </form>
+            
+            <br>
+            
+            <form>
+              <div>
+                <label for="zip">Zip Code:</label>
+                <br>
+                <input id="zip" class="zip" type="text">
+              </div>
+            </form>
+            
+            <br>
+           
+            <p class="lead">
+              <a class="btn btn-primary btn-lg" href="#" id="search" role="button">Search</a>
+            </p>
+          </div>
         </div>
-
-        <script>
-          
-        </script>
         
+        <div class="container">
+        <!-- Example row of columns -->
+        <div class="row">
+          <div class="col-md-4">
+            <h2>Inputs</h2>
+            <p>Use the this page to input data to filter the results. </p>
+            <p><a class="btn btn-secondary" href="#input" role="button">Input Data &raquo;</a></p>
+          </div>
+          <div class="col-md-4">
+            <h2>Results</h2>
+            <p>After searching the data in the input page, view some of the results in here. </p>
+            <p><a class="btn btn-secondary" href="#screen1" role="button">View Results &raquo;</a></p>
+          </div>
+          <div class="col-md-4">
+            <h2>Map</h2>
+            <p>View the data on a google map.</p>
+            <p><a class="btn btn-secondary" href="#screen2" role="button">View Map &raquo;</a></p>
+          </div>
+        </div>
+    
+        <hr>
+    
+        <footer>
+          <p>&copy; Joshua Evangelista 2017</p>
+        </footer>
+      </div> <!-- /container -->
+
         <script>
         
             function initMap() {
@@ -223,6 +247,16 @@
               });
               
               $(".nav-link").on("click", function(){
+                  
+                  $(".screen").hide();
+                  
+                  var target = $(this).attr("href");
+                  
+                  $(target).show();
+                  
+              });
+              
+              $(".btn-secondary").on("click", function(){
                   
                   $(".screen").hide();
                   
