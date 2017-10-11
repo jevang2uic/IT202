@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
+    <meta charset="utf-8">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script>
+      $("#divSearch").addClass("hidden");
+      // $(document).ready(function(){
+       
+      // });
+      
+      if (typeof google === 'object' && typeof google.maps === 'object'){
+         $("#divSearch").removeClass("hidden");
+      }
+    </script>
+    <title>Info windows</title>
+    <style>
+      /* Always set the map height explicitly to define the size of the div
+       * element that contains the map. */
+      #map {
+        height: 100%;
+      }
+      /* Optional: Makes the sample page fill the window. */
+      html, body {
+        height: 100%;
+        margin: 0;
+        padding: 0;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="divSearch">
+      Zipcode: <br>
+      <input type="text" name="zipcode" id="zip" placeholder="Enter a Chicago zip code">  
+      <button id="btnsearch">Submit</button>
+    </div>
+    <div id="map"></div>
+    <script>
+
+      // This example displays a marker at the center of Australia.
+      // When the user clicks the marker, an info window opens.
+
+      function initMap() {
+        $.get("https://data.cityofchicago.org/resource/cdmx-wzbz.json?zip_code=" + $("#zip").val(), function(response){
+          var map = new google.maps.Map(document.getElementById('map'), {
+            zoom: 11,
+            center: {lat: parseFloat(response[0].latitude), lng: parseFloat(response[0].longitude)}
+          });
+  
+          $.each(response,function(i,v){
+            //console.log(v);
+            //$("body").append("<p><strong>" + v.service_request_number + "</strong><ul><li>" + v.street_address + "</li><li>" + v.status + "</li></ul></p><br>");
+            var infowindow = new google.maps.InfoWindow({
+              content: "<p><strong>" + v.service_request_number + "</strong><ul><li>" + v.street_address + "</li><li>" + v.status + "</li></ul></p><br>"
+            });
+            
+            var coord = {lat: parseFloat(v.latitude), lng: parseFloat(v.longitude)};
+
+            var marker = new google.maps.Marker({
+              position: coord,
+              map: map,
+              title: v.street_address
+            });
+            marker.addListener('click', function() {
+              infowindow.open(map, marker);
+            });
+                    
+          });
+        });
+      }
+    </script>
+    <script >
+      $("#btnsearch").on("click", initMap);
+    </script>
+    <script async defer
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCstd0FNhQY-CPsiFshU1_gDvVz1aO1cgw">
+    </script>
+  </body>
+</html>

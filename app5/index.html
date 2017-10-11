@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <!-- Latest compiled and minified CSS -->
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+        
+        <!-- jQuery library -->
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+        
+        <!-- Latest compiled JavaScript -->
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script> 
+        
+        <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet">
+        
+        <title> </title>
+        
+        <style>
+            
+            .screen{
+                display:none;
+            }
+            
+        </style>
+    </head>
+    <body>
+        
+        <nav class="navbar navbar-toggleable-md navbar-light bg-faded">
+          <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <a class="navbar-brand" href="#">Navbar</a>
+        
+          <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav mr-auto">
+              <li class="nav-item active">
+                <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="#screen1">screen1</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="#screen2">screen2</a>
+              </li>              
+              <li class="nav-item">
+                <a class="nav-link" href="#screen3">screen3</a>
+              </li>
+              
+              <!--<li class="nav-item">-->
+              <!--  <a class="nav-link disabled" href="#">Disabled</a>-->
+              <!--</li>-->
+            </ul>
+            <form class="form-inline my-2 my-lg-0">
+              <input class="form-control mr-sm-2" type="text" placeholder="Search">
+              <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+            </form>
+          </div>
+        </nav>
+
+        <div class="container screen" id="screen1">Screen1</div>
+        <div class="container screen" id="screen2">Screen2</div>
+        <div class="container screen" id="screen3">Screen3</div>
+        
+        <script>
+            $(document).ready(function(){
+                $(".nav-link").on("click", function(){
+                    
+                    $(".screen").hide();
+                    
+                    var target = $(this).attr("href");
+                    
+                    $(target).show();
+                });
+            });
+            
+        </script>
+
+
+    </body>
+</html>

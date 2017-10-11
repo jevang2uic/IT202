@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css">
+        
+        
+        <script src="https://code.jquery.com/jquery-3.2.1.min.js" ></script>
+        <!--<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>-->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/js/bootstrap.min.js"></script>
+        
+
+ 
+        <!--Load the AJAX API-->
+        <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+        
+        <title> </title>
+        
+        <style>
+        
+            #template{
+                display:none;
+            }
+            
+            .screen{
+                display:none;
+            }
+            
+        </style>
+    </head>
+    <body>
+      
+        <div id = "template" class="panel panel-default hidden">
+            <div class="panel-heading">
+                <h3 class="panel-title">Panel title</h3>
+            </div>
+            <div class="panel-body">
+                Panel content
+            </div>
+        </div>
+        
+        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+          <a class="navbar-brand" href="#">Navbar</a>
+          <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+
+        
+          <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav mr-auto">
+              <li class="nav-item active">
+                <a class="nav-link" href="#input">Home <span class="sr-only">(current)</span></a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="#screen1">Results</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="#screen2">Map</a>
+              </li>              
+            </ul>
+            <form class="form-inline my-2 my-lg-0">
+              <input class="form-control mr-sm-2" type="text" placeholder="Search">
+              <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+            </form>
+          </div>
+        </nav>
+
+        <div class="container screen" id="screen1"><h3>Results</h3></div>
+        
+        <div class="container screen" id="screen2"><h3>Map</h3><br><div id="map" style="height:1000px;width:100%;"></div></div>
+        
+        
+        <div class="container screen jumbotron starter" id="input">
+          <h1 class="display-3">Chicago Food Inspection Search</h1>
+          <p class="lead">The City of Chicago's data on Food Inspections.</p>
+          <hr class="my-4">
+          <p>Use the inputs here to filter your search</p>
+          
+          <form>
+            <div>
+              <label for="date">InspectionDate:</label>
+              <br>
+              <input id="date" class="date" type="date">
+            </div>
+          </form>
+          
+          <br>
+          
+          <form>
+            <div>
+              <label for="facils">Facility Type:</label>
+              <br>
+              <input list="facils" id="facils-input">
+              <datalist id="facils">
+                <!--<option> test </option>-->
+              </datalist>
+            </div>
+          </form>
+          
+          <br>
+          
+          <form>
+            <div>
+              <label for="results">Inspection Results:</label>
+              <br>
+              <input list="results" id="results-input">
+              <datalist id="results">
+              </datalist>
+            </div>
+          </form>
+          
+          <br>
+          
+          <form>
+            <div>
+              <label for="zip">Zip Code:</label>
+              <br>
+              <input id="zip" class="zip" type="text">
+            </div>
+          </form>
+          
+          <br>
+         
+          <p class="lead">
+            <a class="btn btn-primary btn-lg" href="#" id="search" role="button">Search</a>
+          </p>
+        </div>
+
+        <script>
+          
+        </script>
+        
+        <script>
+        
+            function initMap() {
+            
+              var searchObj = new Object();
+                    
+              if($("#zip").val() != ""){
+                searchObj.zip = $("#zip").val();
+              }
+              
+              if(document.getElementById('results-input').value != ""){// if($("#results").val() != ""){
+                searchObj.results = document.getElementById('results-input').value
+              }
+              
+              if(document.getElementById('facils-input').value != ""){// if($("#facils").val() != ""){
+                searchObj.facility_type = document.getElementById('facils-input').value//$("#facils").find(':selected').data('id');
+              }
+              
+              if($("#date").val() != ""){
+                searchObj.inspection_date = $("#date").val();
+              }
+              
+              // searchStr = "https://data.cityofchicago.org/resource/cwig-ma7x.json?" + $.param(searchObj);
+                  
+              console.log("initMap");
+              console.log("https://data.cityofchicago.org/resource/cwig-ma7x.json?" + $.param(searchObj));
+              
+              
+              $.get("https://data.cityofchicago.org/resource/cwig-ma7x.json?" + $.param(searchObj), function(response){
+                var map = new google.maps.Map(document.getElementById('map'), {
+                  zoom: 11,
+                  center: {lat: parseFloat(response[0].latitude), lng: parseFloat(response[0].longitude)}
+                });
+        
+                $.each(response,function(i,v){
+                  //console.log(v);
+                  //$("body").append("<p><strong>" + v.service_request_number + "</strong><ul><li>" + v.street_address + "</li><li>" + v.status + "</li></ul></p><br>");
+                  var infowindow = new google.maps.InfoWindow({
+                    content: "<p><strong>" + v.inspection_id + "</strong><ul><li>" + v.location_address + "</li><li>" + v.results + "</li></ul></p><br>"
+                  });
+                  
+                  var coord = {lat: parseFloat(v.latitude), lng: parseFloat(v.longitude)};
+      
+                  var marker = new google.maps.Marker({
+                    position: coord,
+                    map: map,
+                    title: v.dba_name
+                  });
+                  marker.addListener('click', function() {
+                    infowindow.open(map, marker);
+                  });
+                          
+                });
+              });
+              console.log("/initMap");
+            }
+        
+            $(document).ready(function(){
+              
+              $(".starter").show();
+                    
+              $.get("https://data.cityofchicago.org/resource/cwig-ma7x.json?$query=SELECT%20DISTINCT%20facility_type", 
+                function (response) {
+                  $.each(response, function(i,v) {
+                    $("#facils").append("<option>" + v.facility_type + "</option>");
+      
+                  })
+                  
+              });
+              
+              $.get("https://data.cityofchicago.org/resource/cwig-ma7x.json?$query=SELECT%20DISTINCT%20results", 
+                function (response) {
+                  $.each(response, function(i,v) {
+                    $("#results").append("<option>" + v.results + "</option>");
+      
+                  })
+                  
+              });
+              
+              $(".nav-link").on("click", function(){
+                  
+                  $(".screen").hide();
+                  
+                  var target = $(this).attr("href");
+                  
+                  $(target).show();
+                  
+              });
+              
+              
+              $("#search").on("click", function(){
+                  var searchObj = new Object();
+                  
+                  if($("#zip").val() != ""){
+                    searchObj.zip = $("#zip").val();
+                  }
+                  
+                  if(document.getElementById('results-input').value != ""){// if($("#results").val() != ""){
+                    searchObj.results = document.getElementById('results-input').value
+                  }
+                  
+                  if(document.getElementById('facils-input').value != ""){// if($("#facils").val() != ""){
+                    searchObj.facility_type = document.getElementById('facils-input').value//$("#facils").find(':selected').data('id');
+                  }
+                  
+                  if($("#date").val() != ""){
+                    searchObj.inspection_date = $("#date").val();
+                  }
+                  
+                  // console.log(searchObj);
+                  // console.log("https://data.cityofchicago.org/resource/cwig-ma7x.json?" + $.param(searchObj));
+                  
+                  var searchStr = "https://data.cityofchicago.org/resource/cwig-ma7x.json?" + $.param(searchObj);
+                  
+                  
+                  
+                  $.get(searchStr, function(response){
+                    $("#screen1").html("<h2>Results: " + response.length + "</h2><br>");
+                    console.log(response);
+                      //console.log(response);
+                      $.each(response,function(i,v){
+                          // console.log(v);
+                          //$("body").append("<p><strong>" + v.service_request_number + "</strong><ul><li>" + v.street_address + "</li><li>" + v.status + "</li></ul></p><br>");
+                          
+                          $("#template").clone().removeClass("hidden").attr("id","request" + i).appendTo("#screen1");
+                          $("#request" + i).find( ".panel-title" ).text(v.dba_name);
+                          //$("#request" + i).find( ".panel-body" ).text("");
+                          $("#request" + i).find( ".panel-body" ).html("<ul><li>" + v.inspection_id + "</li><li>" + v.results + "</li></ul>");
+                          
+                      });
+                  });
+                  initMap();
+              });
+              
+            });
+            
+        </script>
+        <script async defer
+        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCstd0FNhQY-CPsiFshU1_gDvVz1aO1cgw">
+        </script>
+        
+    </body>
+</html>

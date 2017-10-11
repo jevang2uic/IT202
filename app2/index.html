@@ -4,16 +4,6 @@
     <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
     <meta charset="utf-8">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-    <script>
-      $("#divSearch").addClass("hidden");
-      // $(document).ready(function(){
-       
-      // });
-      
-      if (typeof google === 'object' && typeof google.maps === 'object'){
-         $("#divSearch").removeClass("hidden");
-      }
-    </script>
     <title>Info windows</title>
     <style>
       /* Always set the map height explicitly to define the size of the div
@@ -30,24 +20,49 @@
     </style>
   </head>
   <body>
-    <div id="divSearch">
-      Zipcode: <br>
-      <input type="text" name="zipcode" id="zip" placeholder="Enter a Chicago zip code">  
-      <button id="btnsearch">Submit</button>
-    </div>
     <div id="map"></div>
     <script>
-
       // This example displays a marker at the center of Australia.
       // When the user clicks the marker, an info window opens.
-
       function initMap() {
-        $.get("https://data.cityofchicago.org/resource/cdmx-wzbz.json?zip_code=" + $("#zip").val(), function(response){
-          var map = new google.maps.Map(document.getElementById('map'), {
-            zoom: 11,
-            center: {lat: parseFloat(response[0].latitude), lng: parseFloat(response[0].longitude)}
-          });
-  
+        var uluru = {lat: -25.363, lng: 131.044};
+        var map = new google.maps.Map(document.getElementById('map'), {
+          zoom: 11,
+          center: uluru
+        });
+        // var contentString = '<div id="content">'+
+        //     '<div id="siteNotice">'+
+        //     '</div>'+
+        //     '<h1 id="firstHeading" class="firstHeading">Uluru</h1>'+
+        //     '<div id="bodyContent">'+
+        //     '<p><b>Uluru</b>, also referred to as <b>Ayers Rock</b>, is a large ' +
+        //     'sandstone rock formation in the southern part of the '+
+        //     'Northern Territory, central Australia. It lies 335&#160;km (208&#160;mi) '+
+        //     'south west of the nearest large town, Alice Springs; 450&#160;km '+
+        //     '(280&#160;mi) by road. Kata Tjuta and Uluru are the two major '+
+        //     'features of the Uluru - Kata Tjuta National Park. Uluru is '+
+        //     'sacred to the Pitjantjatjara and Yankunytjatjara, the '+
+        //     'Aboriginal people of the area. It has many springs, waterholes, '+
+        //     'rock caves and ancient paintings. Uluru is listed as a World '+
+        //     'Heritage Site.</p>'+
+        //     '<p>Attribution: Uluru, <a href="https://en.wikipedia.org/w/index.php?title=Uluru&oldid=297882194">'+
+        //     'https://en.wikipedia.org/w/index.php?title=Uluru</a> '+
+        //     '(last visited June 22, 2009).</p>'+
+        //     '</div>'+
+        //     '</div>';
+        // var infowindow = new google.maps.InfoWindow({
+        //   content: contentString
+        // });
+        // var marker = new google.maps.Marker({
+        //   position: uluru,
+        //   map: map,
+        //   title: 'Uluru (Ayers Rock)'
+        // });
+        // marker.addListener('click', function() {
+        //   infowindow.open(map, marker);
+        // });
+        $.get("https://data.cityofchicago.org/resource/cdmx-wzbz.json", function(response){
+          map.setCenter({lat: parseFloat(response[0].latitude), lng: parseFloat(response[0].longitude)});
           $.each(response,function(i,v){
             //console.log(v);
             //$("body").append("<p><strong>" + v.service_request_number + "</strong><ul><li>" + v.street_address + "</li><li>" + v.status + "</li></ul></p><br>");
@@ -56,7 +71,6 @@
             });
             
             var coord = {lat: parseFloat(v.latitude), lng: parseFloat(v.longitude)};
-
             var marker = new google.maps.Marker({
               position: coord,
               map: map,
@@ -70,11 +84,8 @@
         });
       }
     </script>
-    <script >
-      $("#btnsearch").on("click", initMap);
-    </script>
     <script async defer
-    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCstd0FNhQY-CPsiFshU1_gDvVz1aO1cgw">
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCstd0FNhQY-CPsiFshU1_gDvVz1aO1cgw&callback=initMap">
     </script>
   </body>
 </html>
