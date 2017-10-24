@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+        <title> </title>
+        <style>
+            #canvas1{
+                background-color: black;
+            }
+            #source{
+                display:none;
+            }
+        </style>
+    </head>
+    <body>
+        <img id="source" src="https://3.bp.blogspot.com/-jGC08Dy0zg8/U405cNq1-MI/AAAAAAAABqU/38d5rmV1S8Y/s1600/redfighter0006.png">
+        <canvas id="canvas1"></canvas>
+        
+        <script>
+        
+            // canvas and context reference
+            var canvas = document.getElementById("canvas1");
+            canvas.height = $(window).height();
+            canvas.width = $(window).width();
+            var context = canvas.getContext("2d");
+        
+            // global variables
+            var hydir = 1;
+            var hxdir = 1;
+            var bydir = -1;
+            var bxdir = -1;
+            
+            // objects for game, player, harm and bene
+            var game = {score: 0, lives: 3};
+            // var player = {x:canvas.width/2, y:canvas.height - 50, radius:50, color:"blue", shape:"circle"};
+            var player = {x:canvas.width/2, y:canvas.height - 50, radius:50, img:document.getElementById("source"), shape:"image"};
+            var harm = {x:Math.floor(Math.random() * canvas.width), y:0, radius:50, xvel:3, yvel:5, xvelmax:3, color:"red", shape:"circle"};
+            var bene = {x:Math.floor(Math.random() * canvas.width), y:0, radius:50, xvel:-3, yvel:3, color:"green", shape:"circle"};
+            
+            function draw () {
+                // update character position properties
+
+                
+                context.clearRect(0, 0, canvas.width, canvas.height);
+                context.font = "30px Arial";
+                context.fillStyle = "white";
+                context.fillText("Lives: " + game.lives,10,50);
+                context.fillText("Score: " + game.score,10,100); 
+                
+                // randomizeVelocity(harm)
+                move(harm);
+
+                // randomizeVelocity(bene)
+                move(bene);
+                
+                if (areColliding(player,harm)) {
+                    //  set properties
+                    game.lives -= 1;
+                    harm.x = Math.floor(Math.random() * canvas.width);
+                    harm.y = 0;
+                    // hydir *= -1;
+                    // hxdir *= -1;
+                }
+                if (areColliding(player,bene)) {
+                    //  set properties
+                    game.score += 100;
+                    bene.x = Math.floor(Math.random() * canvas.width);
+                    bene.y = 0;
+                }
+                if (areColliding(harm,bene)) {
+                    harm.xvel *= -1;
+                    bene.xvel *= -1;
+                }
+                if (reachedEdge(harm, 'bottom')){
+                    harm.y = 0;
+                    harm.x = Math.floor(Math.random() * canvas.width);
+                    harm.x = canvas.height/2
+                }
+                if (reachedEdge(harm, 'left') || reachedEdge(harm, 'right')) {
+                    // set y property
+                    // hxdir *= -1;
+                    harm.xvel *= -1;
+                }
+                if (reachedEdge(bene, 'bottom')) {
+                    bene.y = 0;
+                    bene.x = Math.floor(Math.random() * canvas.width);
+                }
+                if (reachedEdge(bene, 'left') || reachedEdge(bene, 'right')) {
+                    // set y property
+                    // bxdir *= -1;
+                    bene.xvel *= -1;
+                }
+                
+                drawCharacter(player);
+                drawCharacter(harm);
+                drawCharacter(bene);
+                
+                if(game.lives>0){
+                    requestAnimationFrame(draw);
+                }
+                else{
+                    context.clearRect(0, 0, canvas.width, canvas.height);
+                    context.font = "30px Arial";
+                    context.fillStyle = "white";
+                    context.fillText("Lives: " + game.lives,10,50);
+                    context.fillText("Score: " + game.score,10,100); 
+                    context.font = "60px Arial";
+                    context.fillStyle = "red";
+                    context.textAlign = "center";
+                    drawCharacter(player);
+                    drawCharacter(harm);
+                    drawCharacter(bene);
+                    context.fillText("GAME OVER!!",canvas.width/2,canvas.height/2); 
+                }
+                    
+            }
+            
+            function drawCharacter (character) {
+                switch (character.shape) {
+                    case 'circle' :
+                        drawCircle(character.x, character.y, character.radius, character.color);
+                        break;
+                    case 'square' :
+                        // call function to draw square
+                        break;
+                    case 'image' :
+                        // call function to draw image
+                        context.drawImage(character.img, character.x - 50, character.y - 50, character.radius + 50, character.radius + 50);
+                        break;
+                    default: 
+                        console.log('character.shape case fell through');    
+                }    
+            }  
+            
+            function drawCircle (x, y, radius, color) {
+                //
+                context.beginPath();
+                context.arc(x,y,radius,0,2*Math.PI);
+                // context.arc(xpos,ypos,radius,0,2*Math.PI);
+                context.fillStyle = color;
+                context.fill();
+                // context.stroke(); 
+            }
+            
+            function areColliding(character1,character2) {
+                // use 2d collision for circles
+                var dx = character1.x - character2.x;
+                var dy = character1.y - character2.y;
+                var distance = Math.sqrt(dx * dx + dy * dy);
+                
+                if (distance < character1.radius + character2.radius) {
+                    // collision detected!
+                    return true;
+                }
+            }
+            
+            function reachedEdge(character, edge) {
+                if (edge == 'bottom' && character.y > canvas.height)
+                    return true;
+                if(edge == 'top' && character.y < 0)
+                    return true;
+                if (edge == 'right' && character.x > canvas.width)
+                    return true;
+                if(edge == 'left' && character.x < 0)
+                    return true;
+            }
+            
+            // implement a gradual turn with a xvelmax, direction, check if 
+            // xvel == 0 after addition or subtration, invert direction
+            // function seekPlayer(character){
+            //     // if(Math.floor(Math.random()*3) == 0){
+            //         if(character.x < player.x && (character.xvel <= 0
+            //             || character.xvel < character.xvelmax)){
+            //             character.xvel += 1
+            //         }
+            //         else if(character.x > player.x && (character.xvel >= 0
+            //             || character.xvel < -1 * character.xvelmax)){
+            //             character.xvel -= 1
+            //         }
+            //     // }
+            // }
+            
+            function randomizeVelocity(character){
+                if(Math.floor(Math.random() * 75) == 0){
+                    // var change;
+                    // if(Math.floor(Math.random() * 2) == 1 )
+                    //     change = -1
+                    // else
+                    //     change = 1
+                    // character.xvel *= change
+                    character.xvel *= -1;
+                }
+            }
+            
+            function move(character){
+                character.x += character.xvel;
+                character.y += character.yvel;
+            }
+            
+            $(document).ready(function() {
+                // arrow key keydown event handlers to change player position
+               
+                $(document).keydown(function(e) {
+                    switch(e.which) {
+                        case 37: // left
+                            if(!reachedEdge(player, 'left'))
+                                player.x -= 10;
+                            break;
+                
+                        // case 38: // up
+                        //     player.y -= player.radius/5;
+                        //     break;
+                
+                        case 39: // right
+                            if(!reachedEdge(player, 'right'))
+                                player.x += 10;
+                            break;
+                
+                        // case 40: // down
+                        //     player.y += player.radius/5;
+                        //     break;
+                
+                        default: return; // exit this handler for other keys
+                    }
+                    e.preventDefault(); // prevent the default action (scroll / move caret)
+                });
+                requestAnimationFrame(draw);
+                
+            });
+
+        </script>
+    </body>
+</html>

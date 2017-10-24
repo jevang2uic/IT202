@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+        <title> </title>
+    </head>
+    <body>
+        
+        <canvas id="canvas1"></canvas>
+        
+        <script>
+            // global variables
+            var hydir = 1;
+            var hxdir = 1;
+            var bydir = -1;
+            var bxdir = -1;
+            
+            // objects for game, player, harm and bene
+            var game = {score: 0, lives: 3};
+            var player = {x:0, y:300, radius:50, color:"blue", shape:"circle"};
+            var harm = {x:200, y:200, radius:50, color:"red", shape:"circle"};
+            var bene = {x:200, y:400, radius:50, color:"green", shape:"circle"};
+            
+            
+            // canvas and context reference
+            var canvas = document.getElementById("canvas1");
+            canvas.height = $(window).height();
+            canvas.width = $(window).width();
+            var context = canvas.getContext("2d");
+            
+            function draw () {
+                // update character position properties
+                
+                context.clearRect(0, 0, canvas.width, canvas.height);
+                
+                harm.y += hydir;
+                harm.x -= hxdir;
+                bene.y += bydir;
+                bene.x -= bxdir;
+                
+                if (areColliding(player,harm)) {
+                    //  set properties
+                    game.lives -= 1;
+                    harm.x = 200;
+                    harm.y = 200;
+                    // hydir *= -1;
+                    // hxdir *= -1;
+                }
+                if (areColliding(player,bene)) {
+                    //  set properties
+                    game.lives += 1;
+                }
+                if (reachedEdge(harm, 'bottom') || reachedEdge(harm, 'top')) {
+                    // set y property
+                    hydir *= -1;
+                }
+                if (reachedEdge(harm, 'left') || reachedEdge(harm, 'right')) {
+                    // set y property
+                    hxdir *= -1;
+                }
+                if (reachedEdge(bene, 'bottom') || reachedEdge(bene, 'top')) {
+                    // set y property
+                    bydir *= -1;
+                }
+                if (reachedEdge(bene, 'left') || reachedEdge(bene, 'right')) {
+                    // set y property
+                    bxdir *= -1;
+                }
+                
+                drawCharacter(player);
+                drawCharacter(harm);
+                drawCharacter(bene);
+                
+                requestAnimationFrame(draw);
+            }
+            
+            function drawCharacter (character) {
+                switch (character.shape) {
+                    case 'circle' :
+                        drawCircle(character.x, character.y, character.radius, character.color);
+                        break;
+                    case 'square' :
+                        // call function to draw square
+                        break;
+                    case 'image' :
+                        // call function to draw image
+                        break;
+                    default: 
+                        console.log('character.shape case fell through');    
+                }    
+            }  
+            
+            function drawCircle (x, y, radius, color) {
+                //
+                context.beginPath();
+                context.arc(x,y,radius,0,2*Math.PI);
+                // context.arc(xpos,ypos,radius,0,2*Math.PI);
+                context.fillStyle = color;
+                context.fill();
+                // context.stroke(); 
+            }
+            
+            function areColliding(character1,character2) {
+                // use 2d collision for circles
+                var dx = character1.x - character2.x;
+                var dy = character1.y - character2.y;
+                var distance = Math.sqrt(dx * dx + dy * dy);
+                
+                if (distance < character1.radius + character2.radius) {
+                    // collision detected!
+                    return true;
+                }
+            }
+            function reachedEdge(character, edge) {
+                if (edge == 'bottom' && character.y > canvas.height)
+                    return true;
+                if(edge == 'top' && character.y < 0)
+                    return true;
+                if (edge == 'right' && character.x > canvas.width)
+                    return true;
+                if(edge == 'left' && character.x < 0)
+                    return true;
+            }
+            $(document).ready(function() {
+                // arrow key keydown event handlers to change player position
+               
+                $(document).keydown(function(e) {
+                    switch(e.which) {
+                        case 37: // left
+                            player.x -= player.radius/5;
+                            break;
+                
+                        case 38: // up
+                            player.y -= player.radius/5;
+                            break;
+                
+                        case 39: // right
+                            player.x += player.radius/5;
+                            break;
+                
+                        case 40: // down
+                            player.y += player.radius/5;
+                            break;
+                
+                        default: return; // exit this handler for other keys
+                    }
+                    e.preventDefault(); // prevent the default action (scroll / move caret)
+                });
+                 requestAnimationFrame(draw);
+            });
+
+        </script>
+    </body>
+</html>

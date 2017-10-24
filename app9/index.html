@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+        <title> </title>
+        
+        <style>
+            /*canvas{*/
+            /*    backgroud-color: white;*/
+            /*}*/
+        </style>
+        
+    </head>
+    <body>
+        <canvas id="canvas1"></canvas>
+        
+        <script>
+        
+            
+            
+            // $(document).ready(function(){
+
+            // });
+            
+            // drawCircle(50, 50);
+            $(document).ready(function(){
+                var c = document.getElementById("canvas1");
+                c.height = $(window).height();
+                c.width = $(window).width();
+                
+                var c = document.getElementById("canvas1");
+                var ctx = c.getContext("2d");
+                
+                
+                
+                $("canvas").on("click", function(evt){
+                    // console.log(evt);
+                    // var c = document.getElementById("canvas1");
+                    // c.height = $(window).height();
+                    // c.width = $(window).width();
+                    
+                    // drawCircle(evt.clientX,evt.clientY);
+                    ctx.clearRect(0, 0, c.width/2, c.height/2);
+                });
+                
+                function drawCircle(x,y){
+                    // var c = document.getElementById("canvas1");
+                    // var ctx = c.getContext("2d");
+                    
+                    var xpos = Math.floor(Math.random() * c.width);
+                    var ypos = Math.floor(Math.random() * c.height);
+                    
+                    
+                    ctx.beginPath();
+                    
+                    var radius = Math.floor(Math.random() * 100);
+                    
+                    //ctx.arc(x,y,radius,0,2*Math.PI);
+                    ctx.arc(xpos,ypos,radius,0,2*Math.PI);
+                    // ctx.fillStyle = 0x0 + radius;
+                    ctx.fillStyle = '#' + Math.floor(Math.random() * 16777215).toString(16);
+                    ctx.fill();
+                    ctx.stroke(); 
+                    requestAnimationFrame(drawCircle);
+                }
+                
+                requestAnimationFrame(drawCircle); // needs to be last line
+            });
+            
+        </script>
+    
+    </body>
+</html>

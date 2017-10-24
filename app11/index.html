@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title> </title>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+        <script src="https://unpkg.com/dexie@latest/dist/dexie.js"></script>
+    </head>
+    <body>
+        <form>
+            <input type="text" name="displayName"><br>
+            <input type="radio" name="shareLocationData">
+            <span></span>
+            <input type="button" name="save">
+        </form>
+        <!--<h3 id = 'display_name'></h3>-->
+        <!--<form id = 'share_location'>-->
+        <!--    <input type="radio">-->
+        <!--</form>-->
+        <!--<span id ='date'>-->
+            
+        <!--</span>-->
+        <!--<form id = 'save'>-->
+        <!--    <input type="button" text='Save'>-->
+        <!--</form>-->
+        <script>
+            var db = new Dexie('dbname');
+            db.version(1).stores({settings: 'name, value'});
+            db.on("populate", function() {
+                db.settings.add({name:'displayName', value:'Display Name'})
+                db.settings.add({name:'shareLocationData', value:'false'})
+                db.settings.add({name:'lastAccessed', value:Date.now().toString()})
+            });
+        </script>
+    </body>
+</html>
