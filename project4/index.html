@@ -104,12 +104,12 @@
                     context.fillStyle = "white";
                     context.fillText("Lives: " + game.lives,10,50);
                     context.fillText("Score: " + game.score,10,100); 
-                    context.font = "60px Arial";
-                    context.fillStyle = "red";
-                    context.textAlign = "center";
                     drawCharacter(player);
                     drawCharacter(harm);
                     drawCharacter(bene);
+                    context.font = "60px Arial";
+                    context.fillStyle = "red";
+                    context.textAlign = "center";
                     context.fillText("GAME OVER!!",canvas.width/2,canvas.height/2); 
                 }
                     
