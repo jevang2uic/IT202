@@ -6,7 +6,7 @@ html, body {
 }
 
 .shrine-product-card {
-  margin: 0 auto;
+  /*margin: 0 auto;*/
   width: 320px;
   border-radius: 4px;
   margin-bottom: 8px;
@@ -90,4 +90,13 @@ html, body {
   height: 32px;
   padding-left: 32px;
   letter-spacing: .2em;
+}
+
+#shrine-products {
+  --mdc-layout-grid-gutter: 8px;
+}
+
+#shrine-products .mdc-layout-grid__cell {
+  display: flex;
+  justify-content: center;
 }
