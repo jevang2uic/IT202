@@ -3,20 +3,20 @@
 <head>
   <meta charset="utf-8">
   <meta http-equiv="x-ua-compatible" content="ie=edge">
-  <title>Shrine (MDC-Web Example App)</title>
+  <title>Resturants Selector</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
-        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css">
-        
-        
-        <script src="https://code.jquery.com/jquery-3.2.1.min.js" ></script>
-        <!--<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>-->
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js"></script>
-        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/js/bootstrap.min.js"></script>
-        
+  <!--<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css">-->
+  
+  
+  <script src="https://code.jquery.com/jquery-3.2.1.min.js" ></script>
+  <!--<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>-->
+  <!--<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js"></script>-->
+  <!--<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/js/bootstrap.min.js"></script>-->
+  
 
- 
-        <!--Load the AJAX API-->
-        <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+
+  <!--Load the AJAX API-->
+  <!--<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>-->
   <link rel="icon" sizes="192x192" href="https://material.io/static/images/simple-lp/favicons/components-192x192.png">
   <link rel="shortcut icon" href="https://material.io/static/images/simple-lp/favicons/components-72x72.png">
 
@@ -26,7 +26,13 @@
   <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
   <link rel="stylesheet"
         href="https://unpkg.com/material-components-web@0.9.1/dist/material-components-web.min.css">
-  <link rel="stylesheet" href="app.css">
+  <link rel="stylesheet" href="./app.css">
+  
+  <!--<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.4/jquery.min.js"></script>-->
+  <!--<script type="text/javascript" src="http://oauth.googlecode.com/svn/code/javascript/oauth.js"></script>-->
+  <!--<script type="text/javascript" src="http://oauth.googlecode.com/svn/code/javascript/sha1.js"></script>        -->
+
+  
   <link rel="manifest" href="./manifest.json">
   <style>
 
@@ -40,50 +46,92 @@
       
   </style>
 </head>
+
 <body class="mdc-typography">
-  <div id="accordion" role="tablist">
-    <div id = "template" class="card hidden">
-      <div class="card-header" role="tab" id="headingOne">
-        <h5 class="mb-0">
-          <a data-toggle="collapse" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-            Collapsible Group Item #1
-          </a>
-        </h5>
-      </div>
-    </div>
-  </div>
+  <!--<div id="accordion" role="tablist">-->
+  <!--  <div id = "template" class="card hidden">-->
+  <!--    <div class="card-header" role="tab" id="headingOne">-->
+  <!--      <h5 class="mb-0">-->
+  <!--        <a data-toggle="collapse" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne">-->
+  <!--          Collapsible Group Item #1-->
+  <!--        </a>-->
+  <!--      </h5>-->
+  <!--    </div>-->
+  <!--  </div>-->
+  <!--</div>-->
         
-  <nav class="navbar navbar-expand-lg navbar-light bg-light">
-    <a class="navbar-brand" href="#">Navbar</a>
-    <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-      <span class="navbar-toggler-icon"></span>
-    </button>
+  <!--<nav class="navbar navbar-expand-lg navbar-light bg-light">-->
+  <!--  <a class="navbar-brand" href="#">Navbar</a>-->
+  <!--  <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">-->
+  <!--    <span class="navbar-toggler-icon"></span>-->
+  <!--  </button>-->
   
         
-    <div class="collapse navbar-collapse" id="navbarSupportedContent">
-      <ul class="navbar-nav mr-auto">
-        <li class="nav-item active">
-          <a class="nav-link" href="#input">Home <span class="sr-only">(current)</span></a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="#screen1">Results</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="#screen2">Map</a>
-        </li>              
-      </ul>
-      <form class="form-inline my-2 my-lg-0">
-        <input class="form-control mr-sm-2" type="text" placeholder="Search">
-        <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
-      </form>
+  <!--  <div class="collapse navbar-collapse" id="navbarSupportedContent">-->
+  <!--    <ul class="navbar-nav mr-auto">-->
+  <!--      <li class="nav-item active">-->
+  <!--        <a class="nav-link" href="#input">Home <span class="sr-only">(current)</span></a>-->
+  <!--      </li>-->
+  <!--      <li class="nav-item">-->
+  <!--        <a class="nav-link" href="#screen1">Results</a>-->
+  <!--      </li>-->
+  <!--      <li class="nav-item">-->
+  <!--        <a class="nav-link" href="#screen2">Map</a>-->
+  <!--      </li>              -->
+  <!--    </ul>-->
+  <!--    <form class="form-inline my-2 my-lg-0">-->
+  <!--      <input class="form-control mr-sm-2" type="text" placeholder="Search">-->
+  <!--      <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>-->
+  <!--    </form>-->
+  <!--  </div>-->
+  <!--</nav>-->
+  
+  <header id="shrine-header"
+        class="mdc-toolbar mdc-toolbar--fixed mdc-theme--text-primary-on-background">
+    <div class="mdc-toolbar__row">
+      <section class="mdc-toolbar__section mdc-toolbar__section--align-start">
+        <a id="shrine-nav-icon" class="material-icons mdc-ripple-surface"  
+            href="#" 
+           aria-label="Click to show the navigation menu"
+           aria-controls="shrine-nav-menu"
+           data-mdc-auto-init="MDCRipple"
+           data-mdc-ripple-is-unbounded>menu</a>
+        <h1 id="shrine-logo"          
+            class="mdc-toolbar__title"><span>Shrine</span></h1>
+      </section>
     </div>
-  </nav>
-  
-  <div class="container screen" id="screen1"><h3>Results</h3></div>
-  
-  <div class="container screen" id="screen2"><h3>Map</h3><br></div>
-  
-  <div class="container screen starter"id="input"><h3>Resturants</h3></div>
+  </header>
+  <aside id="shrine-nav-menu" class="mdc-temporary-drawer" data-mdc-auto-init="MDCTemporaryDrawer">
+    <nav class="mdc-temporary-drawer__drawer">
+      <header class="mdc-temporary-drawer__header"></header>
+      <nav class="mdc-temporary-drawer__content mdc-list">
+        <a class="mdc-list-item" href="#Results">Results</a>
+        <a class="mdc-list-item" href="#Map">Map</a>
+        <a class="mdc-list-item" href="#Resturants">Resturants</a>
+      </nav>
+    </nav>
+  </aside>
+  <main id="shrine-products" class="mdc-toolbar-fixed-adjust">
+    
+    <div class="mdc-layout-grid mdc-toolbar-fixed-adjust screen" id="Results"><h3>Results</h3>
+      <!--<div class="mdc-layout-grid__cell">-->
+      <!--  <div class="mdc-card shrine-product-card">-->
+      <!--    <section class="mdc-card__primary">-->
+      <!--      <span class="mdc-card__title shrine-product-card__price">$20</span>-->
+      <!--    </section>-->
+      <!--    <img class="shrine-product-card__image" width="240" height="240" alt="Sunglasses" src="assets/sunnies.png">-->
+      <!--  </div>-->
+      <!--</div>-->
+    </div>
+    
+    <div class="mdc-layout-grid mdc-toolbar-fixed-adjust screen" id="Map"><h3>Map</h3>
+
+    </div>
+    
+    <div class="mdc-layout-grid mdc-toolbar-fixed-adjust screen starter" id="Resturants"><h3>Resturants</h3>
+
+    </div>
+  </main>
       
   <!--<header id="shrine-header"
         class="mdc-toolbar mdc-toolbar--fixed mdc-theme--text-primary-on-background">
@@ -169,6 +217,9 @@
       document.getElementById('shrine-nav-menu').MDCTemporaryDrawer.open = true;
     });
   </script>-->
+  
+  <script src="https://unpkg.com/material-components-web@latest/dist/material-components-web.min.js"></script>
+  <script>window.mdc.autoInit();</script>
   <script>
     if('serviceWorker' in navigator) {
       navigator.serviceWorker.register('./sw.js', { scope: './' })
@@ -188,7 +239,7 @@
               
       $(".starter").show();
       
-      $(".nav-link").on("click", function(){
+      $(".mdc-list-item").on("click", function(){
           
           $(".screen").hide();
           
@@ -197,8 +248,31 @@
           $(target).show();
           
       });
+      
+      fetch('https://cors-anywhere.herokuapp.com/https://api.yelp.com/v3/businesses/search?location=12345', {
+        method: 'GET',
+          headers: {
+            'authorization': 'Bearer Q513FUYfiOKc5fS17A6POOyJooFK43CFouknABObDLNmNiXEsyFvyxGR6FqaNrT-alI9WL5NioGP81rz0yWwaPs5MoFJ30GliWALCBpJofY9Nwp9PLiUffnRJGoaWnYx'
+            // 'Access-Control-Allow-Origin':  'http://127.0.0.1:3000',
+            // 'Access-Control-Allow-Methods': 'POST',
+            // 'Access-Control-Allow-Headers': 'Content-Type, Authorization'
+
+          }
+        }
+      ).then((res)=> res.json()).then((resJSON) => {
+        console.log('test', resJSON)
+      })
+      
     });
               
+  </script>
+  
+  <script>
+    
+    document.getElementById('shrine-nav-icon').addEventListener('click', function(evt) {
+      evt.preventDefault();
+      document.getElementById('shrine-nav-menu').MDCTemporaryDrawer.open = true;
+    });
   </script>
 </body>
 </html>
