@@ -1,6 +1,10 @@
 <!doctype html>
 <html lang="en">
 <head>
+  <!-- NOTE: Reviews for yelp and resturants from yelp come from 2 different 
+  endpoints, however I have included a seperate third endpoint just incase
+  that using those two are not enough-->
+  
   <meta charset="utf-8">
   <meta http-equiv="x-ua-compatible" content="ie=edge">
   <title>Resturants Selector</title>
@@ -31,11 +35,15 @@
   <!--<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.4/jquery.min.js"></script>-->
   <!--<script type="text/javascript" src="http://oauth.googlecode.com/svn/code/javascript/oauth.js"></script>-->
   <!--<script type="text/javascript" src="http://oauth.googlecode.com/svn/code/javascript/sha1.js"></script>        -->
-
+  <script src="https://unpkg.com/dexie@latest/dist/dexie.js"></script>
   
   <link rel="manifest" href="./manifest.json">
   <style>
 
+      #map {
+        height: 400px;
+        width: 100%;
+      }
       #template{
           display:none;
       }
@@ -44,47 +52,16 @@
           display:none;
       }
       
+      .blue{
+          font-weight: 900;
+          color:blue;
+      }
+      
+      
   </style>
 </head>
 
 <body class="mdc-typography">
-  <!--<div id="accordion" role="tablist">-->
-  <!--  <div id = "template" class="card hidden">-->
-  <!--    <div class="card-header" role="tab" id="headingOne">-->
-  <!--      <h5 class="mb-0">-->
-  <!--        <a data-toggle="collapse" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne">-->
-  <!--          Collapsible Group Item #1-->
-  <!--        </a>-->
-  <!--      </h5>-->
-  <!--    </div>-->
-  <!--  </div>-->
-  <!--</div>-->
-        
-  <!--<nav class="navbar navbar-expand-lg navbar-light bg-light">-->
-  <!--  <a class="navbar-brand" href="#">Navbar</a>-->
-  <!--  <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">-->
-  <!--    <span class="navbar-toggler-icon"></span>-->
-  <!--  </button>-->
-  
-        
-  <!--  <div class="collapse navbar-collapse" id="navbarSupportedContent">-->
-  <!--    <ul class="navbar-nav mr-auto">-->
-  <!--      <li class="nav-item active">-->
-  <!--        <a class="nav-link" href="#input">Home <span class="sr-only">(current)</span></a>-->
-  <!--      </li>-->
-  <!--      <li class="nav-item">-->
-  <!--        <a class="nav-link" href="#screen1">Results</a>-->
-  <!--      </li>-->
-  <!--      <li class="nav-item">-->
-  <!--        <a class="nav-link" href="#screen2">Map</a>-->
-  <!--      </li>              -->
-  <!--    </ul>-->
-  <!--    <form class="form-inline my-2 my-lg-0">-->
-  <!--      <input class="form-control mr-sm-2" type="text" placeholder="Search">-->
-  <!--      <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>-->
-  <!--    </form>-->
-  <!--  </div>-->
-  <!--</nav>-->
   
   <header id="shrine-header"
         class="mdc-toolbar mdc-toolbar--fixed mdc-theme--text-primary-on-background">
@@ -105,15 +82,19 @@
     <nav class="mdc-temporary-drawer__drawer">
       <header class="mdc-temporary-drawer__header"></header>
       <nav class="mdc-temporary-drawer__content mdc-list">
-        <a class="mdc-list-item" href="#Results">Results</a>
-        <a class="mdc-list-item" href="#Map">Map</a>
         <a class="mdc-list-item" href="#Resturants">Resturants</a>
+        <a class="mdc-list-item" href="#Favorites">Favorites</a>
+        <a class="mdc-list-item" href="#Results">Reviews</a>
+        <a class="mdc-list-item" href="#Map">Map</a>
+        <a class="mdc-list-item" href="#Selection">Selection</a>
       </nav>
     </nav>
   </aside>
   <main id="shrine-products" class="mdc-toolbar-fixed-adjust">
+          
     
-    <div class="mdc-layout-grid mdc-toolbar-fixed-adjust screen" id="Results"><h3>Results</h3>
+    <div class="mdc-toolbar-fixed-adjust screen" id="Results">
+      <h3>Reviews</h3>
       <!--<div class="mdc-layout-grid__cell">-->
       <!--  <div class="mdc-card shrine-product-card">-->
       <!--    <section class="mdc-card__primary">-->
@@ -122,105 +103,438 @@
       <!--    <img class="shrine-product-card__image" width="240" height="240" alt="Sunglasses" src="assets/sunnies.png">-->
       <!--  </div>-->
       <!--</div>-->
+      <div class="mdc-card">
+        <section class="mdc-card__primary">
+          <h1 class="mdc-card__title mdc-card__title--large">Reviews</h1>
+        </section>
+      </div>
+      <div class="mdc-layout-grid" id="addRev">
+        <div class="mdc-layout-grid__cell hidden" id="template1">
+          <div class="mdc-card shrine-product-card">
+            <section class="mdc-card__primary">
+              <span id="name" class="mdc-card__title">NAME</span>
+              <span id="rating" class="mdc-card__title shrine-product-card__price">$20</span>
+              <p><a id="review" href="#"></a></p>
+            </section>
+            <br>
+          </div>
+        </div>
+      </div>
     </div>
     
-    <div class="mdc-layout-grid mdc-toolbar-fixed-adjust screen" id="Map"><h3>Map</h3>
-
+    <div class="mdc-toolbar-fixed-adjust screen" id="Favorites">
+      <h3>Favorites</h3>
+      <div class="mdc-layout-grid" id="addFav">
+      </div>
     </div>
     
-    <div class="mdc-layout-grid mdc-toolbar-fixed-adjust screen starter" id="Resturants"><h3>Resturants</h3>
-
+    <div class="mdc-toolbar-fixed-adjust screen" id="Selection">
+      <!--<h3>Selection</h3>-->
+      <!--<div class="mdc-layout-grid__cell">-->
+      <!--  <div class="mdc-card shrine-product-card">-->
+      <!--    <section class="mdc-card__primary">-->
+      <!--      <span class="mdc-card__title shrine-product-card__price">$20</span>-->
+      <!--    </section>-->
+      <!--    <img class="shrine-product-card__image" width="240" height="240" alt="Sunglasses" src="assets/sunnies.png">-->
+      <!--  </div>-->
+      <!--</div>-->
+      <!--<p>Add Resturants from the Resturants (or Favorites) tab and then click the button below to select a resturant</p>-->
+      <div class="mdc-card">
+        <section class="mdc-card__primary">
+          <h1 class="mdc-card__title mdc-card__title--large">Selection</h1>
+          <h2 class="mdc-card__subtitle quote">Add Resturants from the Resturants (or Favorites) tab and then click the button below to select a resturant</h2>
+        </section>
+      </div>
+      
+      <button class="mdc-button mdc-button--raised" data-mdc-auto-init="MDCRipple" id='btnChoose'>Choose Resturant</button>
+      <div class="mdc-layout-grid" id="addSel">
+        <div class="mdc-layout-grid__cell hidden countme" id="template2">
+          <div class="mdc-card shrine-product-card">
+            <section class="mdc-card__primary">
+              <span id="name" class="mdc-card__title">NAME</span>
+            </section>
+            <br>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <div class="mdc-toolbar-fixed-adjust screen" id="Map">
+      <div class="mdc-card">
+        <section class="mdc-card__primary">
+          <h1 class="mdc-card__title mdc-card__title--large">Map</h1>
+        </section>
+      </div>
+      <div id="map"></div>
+      <div class="mdc-layout-grid">
+        
+      </div>
+    </div>
+    
+    <div class="mdc-toolbar-fixed-adjust screen starter" id="Resturants">
+      <!--<h3>Resturants</h3>-->
+      
+      <!--<p class="quote">Qutoe of the day: </p>-->
+    <div class="mdc-card">
+      <div class="mdc-card">
+        <section class="mdc-card__primary">
+          <h1 class="mdc-card__title mdc-card__title--large">Resturants</h1>
+        </section>
+      </div>
+      
+      <section class="mdc-card__primary">
+        <h1 class="mdc-card__title mdc-card__title--large">Qutoe of the day:</h1>
+        <h2 class="mdc-card__subtitle quote"></h2>
+      </section>
+    </div>
+    <div class="mdc-card delete">
+      <section class="mdc-card__primary">
+        <h1 class="mdc-card__title mdc-card__title--large">Please wait, getting geolocation data</h1>
+      </section>
+    </div>
+      <!--<p class="delete">Please wait, getting geolocation data</p>-->
+      <div class="mdc-layout-grid" id="addHere">
+        <div class="mdc-layout-grid__cell hidden" id="template">
+          <div class="mdc-card shrine-product-card">
+            <section class="mdc-card__primary">
+              <span id="name" class="mdc-card__title">NAME</span>
+              <span id="price" class="mdc-card__title shrine-product-card__price">$20</span>
+            </section>
+            <img class="shrine-product-card__image" width="240" height="240" alt="Picture" src="#">
+            <br>
+            <button class="mdc-button mdc-button--raised" data-mdc-auto-init="MDCRipple" id='btnAdd'>Add</button>
+            <button class="mdc-button mdc-button--raised" data-mdc-auto-init="MDCRipple" id='btnFav'>Favorite</button>
+            <button class="mdc-button mdc-button--raised" data-mdc-auto-init="MDCRipple" id='btnReviews'>Reviews</button>
+          </div>
+        </div>
+      </div>
     </div>
   </main>
       
-  <!--<header id="shrine-header"
-        class="mdc-toolbar mdc-toolbar--fixed mdc-theme--text-primary-on-background">
-    <div class="mdc-toolbar__row">
-      <section class="mdc-toolbar__section mdc-toolbar__section--align-start">
-        <a id="shrine-nav-icon" class="material-icons mdc-ripple-surface"  
-            href="#" 
-           aria-label="Click to show the navigation menu"
-           aria-controls="shrine-nav-menu"
-           data-mdc-auto-init="MDCRipple"
-           data-mdc-ripple-is-unbounded>menu</a>
-        <h1 id="shrine-logo"          
-            class="mdc-toolbar__title"><span>Shrine</span></h1>
-      </section>
-    </div>
-  </header>
-  <aside id="shrine-nav-menu" class="mdc-temporary-drawer" data-mdc-auto-init="MDCTemporaryDrawer">
-    <nav class="mdc-temporary-drawer__drawer">
-      <header class="mdc-temporary-drawer__header"></header>
-      <nav class="mdc-temporary-drawer__content mdc-list">
-        <a class="mdc-list-item" href="#">Home</a>
-        <a class="mdc-list-item" href="#">Clothing</a>
-        <a class="mdc-list-item" href="#">Popsicles</a>
-      </nav>
-    </nav>
-  </aside>
-  <main id="shrine-products" class="mdc-layout-grid mdc-toolbar-fixed-adjust">
-    <div class="mdc-layout-grid__cell">
-    <div class="mdc-card shrine-product-card">
-      <section class="mdc-card__primary">
-        <span class="mdc-card__title shrine-product-card__price">$20</span>
-      </section>
-      <img class="shrine-product-card__image" width="240" height="240" alt="Sunglasses" src="assets/sunnies.png">
-    </div>
-    </div>
-    <div class="mdc-layout-grid__cell">
-    <div class="mdc-card shrine-product-card">
-      <section class="mdc-card__primary">
-        <span class="mdc-card__title shrine-product-card__price">$80</span>
-      </section>
-      <img class="shrine-product-card__image" width="240" height="240" alt="Shoes" src="assets/chucks.png">
-    </div>
-    </div>
-    <div class="mdc-layout-grid__cell">
-    <div class="mdc-card shrine-product-card">
-      <section class="mdc-card__primary">
-        <span class="mdc-card__title shrine-product-card__price">$90</span>
-      </section>
-      <img class="shrine-product-card__image" width="240" height="240" alt="Beach ball" src="assets/beachball.png">
-    </div>
-    </div>
-    <div class="mdc-layout-grid__cell">
-    <div class="mdc-card shrine-product-card">
-      <section class="mdc-card__primary">
-        <span class="mdc-card__title shrine-product-card__price">$30</span>
-      </section>
-      <img class="shrine-product-card__image" width="240" height="240" alt="Backpack" src="assets/backpack.png">
-    </div>
-    </div>
-    <div class="mdc-layout-grid__cell">
-    <div class="mdc-card shrine-product-card">
-      <section class="mdc-card__primary">
-        <span class="mdc-card__title shrine-product-card__price">$90</span>
-      </section>
-      <img class="shrine-product-card__image" width="240" height="240" alt="Clock" src="assets/clock.png">
-    </div>
-    </div>
-    <div class="mdc-layout-grid__cell">
-    <div class="mdc-card shrine-product-card">
-      <section class="mdc-card__primary">
-        <span class="mdc-card__title shrine-product-card__price">$30</span>
-      </section>
-      <img class="shrine-product-card__image" width="240" height="240" alt="Fish bowl" src="assets/fishbowl.png">
-    </div>
-    </div>
-  </main>-->
-  <!--<script src="https://unpkg.com/material-components-web@0.9.1/dist/material-components-web.min.js">
-  </script>
-  <script>
-    mdc.autoInit();
-    document.getElementById('shrine-nav-icon').addEventListener('click', function(evt) {
-      evt.preventDefault();
-      document.getElementById('shrine-nav-menu').MDCTemporaryDrawer.open = true;
-    });
-  </script>-->
-  
   <script src="https://unpkg.com/material-components-web@latest/dist/material-components-web.min.js"></script>
   <script>window.mdc.autoInit();</script>
   <script>
+  
+    var currentQuote = {};
+
+    var db = new Dexie('FavList');
+    
+  	// Define a schema
+  	db.version(1).stores({
+  		favorites: 'id, name, img, price'
+  	});
+  	// Open the database
+  	db.open().catch(function(error) {
+  		alert('Uh oh : ' + error);
+  	});
+  
+    $(document).ready(function(){
+      // $(".screen").hide();
+              
+      $.get("https://quotes.rest/qod.json", function(response){
+        currentQuote = response.contents.quotes[0];
+        
+        $(".quote").append(currentQuote.quote + '<br>');
+        
+       });
+      
+      $(".starter").show();
+      
+      $(".hidden").hide();
+      
+      $("#addFav").find($(".mdc-layout-grid__cell")).remove();
+      db.favorites.each(function(v){
+        var clone = $("#template").clone();
+        clone.find("#name").text(v.name);
+        clone.find("#price").text("Price: " + v.price);
+        clone.removeClass("hidden");
+        clone.attr("id", "" + v.id);
+        clone.find(".mdc-card img").attr("src", v.img);
+        clone.show();
+        $("#addFav").append(clone);
+        
+        clone.find("#btnAdd").on('click', function(){
+          // console.log(v.id);
+          if($("#addSel").find("#"+v.id).length == 0){
+            var t = $("#template2").clone();
+            t.find("#name").text(v.name);
+            $("#addSel").append(t);
+            t.removeClass("hidden");
+            t.attr("id", "" + v.id + "sel");
+            t.show();
+          }
+        })
+        
+        clone.find("#btnReviews").on('click', function(){
+          // console.log('click! ' + v.id)
+          $("#addRev").find($(".mdc-layout-grid__cell")).not("#template1").remove();
+          fetch('https://cors-anywhere.herokuapp.com/https://api.yelp.com/v3/businesses/'+ v.id +'/reviews', {
+            method: 'GET',
+              headers: {
+                'authorization': 'Bearer Q513FUYfiOKc5fS17A6POOyJooFK43CFouknABObDLNmNiXEsyFvyxGR6FqaNrT-alI9WL5NioGP81rz0yWwaPs5MoFJ30GliWALCBpJofY9Nwp9PLiUffnRJGoaWnYx'
+                // 'Access-Control-Allow-Origin':  'http://127.0.0.1:3000',
+                // 'Access-Control-Allow-Methods': 'POST',
+                // 'Access-Control-Allow-Headers': 'Content-Type, Authorization'
+    
+              }
+            }
+          ).then((res)=> res.json()).then((resJSON) => {
+            // console.log('test1', resJSON)
+            $.each(resJSON.reviews, function(i,item){
+              console.log(item.text);
+              console.log(v.name);
+              var t = $("#template1").clone();
+              t.find("#name").text(v.name);
+              $("#addRev").append(t);
+              t.removeClass("hidden");
+              t.attr("id", "" + v.id + "rev");
+              t.find("#rating").text(item.rating);
+              t.find("#review").text(item.text);
+              t.find("#review").attr("href", item.url)
+              // t.find("#name").on('click',function(){
+              //   t.remove();
+              // });
+              t.show();
+            })
+          })
+          $(".screen").hide();
+          $("#Results").show();
+        })
+      })
+      
+      $(".mdc-list-item").on("click", function(){
+          
+          $(".screen").hide();
+          
+          var target = $(this).attr("href");
+          // google.maps.event.trigger(map, 'resize');
+          $(target).show();
+          
+      });
+      
+      $("#btnChoose").on('click', function(){
+        // console.log($(".countme").length - 1);
+        var val = Math.floor(Math.random() * ($(".countme").length - 1) + 1);
+        console.log("val "+val);
+        $("#Selection").find("#name").removeClass("blue");
+        $("#Selection").find("#name").eq(val).addClass("blue");
+        
+      })
+      
+    });
+  
+    function getLocation(){
+      if ("geolocation" in navigator){
+        navigator.geolocation.getCurrentPosition(function(position) {
+          console.log(position.coords.latitude +" "+ position.coords.longitude);
+          initMap(position.coords.latitude, position.coords.longitude)
+          
+        });
+      }
+      else {
+        alert("No Geolocation available")
+      }
+    }
+    
+    var iw = null;
+    
+    function initMap(latitude, longitude){
+      $('#map').css('height', $(window).height());
+      var uluru = {lat: latitude, lng: longitude};
+      var map = new google.maps.Map(document.getElementById('map'), {
+        zoom: 15,
+        center: uluru
+      });
+      var infowindow = new google.maps.InfoWindow({
+        content: "<h1><strong>Current Location</strong></h1>"
+      });
+      var marker = new google.maps.Marker({
+        position: uluru,
+        map: map,
+        title: 'Current Location'
+      });
+      marker.addListener('click', function() {
+        if(iw){
+          iw.close();
+        }
+        iw = infowindow;
+        infowindow.open(map, marker);
+      });
+      
+      fetch('https://cors-anywhere.herokuapp.com/https://api.yelp.com/v3/businesses/search?latitude='+ latitude+'&longitude='+longitude + '&limit=50&term=food', {
+            method: 'GET',
+              headers: {
+                'authorization': 'Bearer Q513FUYfiOKc5fS17A6POOyJooFK43CFouknABObDLNmNiXEsyFvyxGR6FqaNrT-alI9WL5NioGP81rz0yWwaPs5MoFJ30GliWALCBpJofY9Nwp9PLiUffnRJGoaWnYx'
+                // 'Access-Control-Allow-Origin':  'http://127.0.0.1:3000',
+                // 'Access-Control-Allow-Methods': 'POST',
+                // 'Access-Control-Allow-Headers': 'Content-Type, Authorization'
+    
+              }
+            }
+          ).then((res)=> res.json()).then((resJSON) => {
+            console.log('test', resJSON)
+            $.each(resJSON.businesses, function(i,v){
+              // console.log(v);
+              // $("body").append("<p><strong>" + v.name + "</strong><ul><li>" + v.location.display_address[0] + "</li><li>" + v.display_phone + "</li></ul></p><br>");
+              var clone = $("#template").clone();
+              var priceCheck = v.price;
+              if(v.price){
+                priceCheck = v.price;
+              }
+              else{
+                priceCheck="?";
+              }
+              clone.find("#name").text(v.name);
+              clone.find("#price").text("Price: " + priceCheck);
+              clone.removeClass("hidden");
+              clone.attr("id", "" + v.id);
+              clone.find(".mdc-card img").attr("src", v.image_url);
+              clone.show();
+              // clone.find('#btnAdd').attr("id", "#btnAdd"+v.id)
+              
+              clone.find("#btnAdd").on('click', function(){
+                // console.log(v.id);
+                if($("#addSel").find("#"+v.id+ "sel").length == 0){
+                  var t = $("#template2").clone();
+                  t.find("#name").text(v.name);
+                  $("#addSel").append(t);
+                  t.removeClass("hidden");
+                  t.attr("id", "" + v.id + "sel");
+                  // t.find("#name").on('click',function(){
+                  //   t.remove();
+                  // });
+                  t.show();
+                }
+              })
+              
+              clone.find("#btnFav").on('click', function(){
+                // $("#addFav").append(clone.clone());
+                var c = clone.clone();
+                c.find("#btnAdd").on('click', function(){
+                  if($("#addSel").find("#"+v.id).length == 0){
+                    var t = $("#template2").clone();
+                    t.find("#name").text(v.name);
+                    $("#addSel").append(t);
+                    t.removeClass("hidden");
+                    t.attr("id", "" + v.id);
+                    t.show();
+                  }
+                });
+                // if($("#addFav").find("#"+v.id).length == 0){
+                //   $("#addFav").append(c);
+                // }
+                if($("#addFav").find("#"+v.id).length == 0){
+                  console.log("favoriting")
+                  $("#addFav").append(c);
+                  db.favorites.add({
+                    id: v.id,
+                    name: v.name,
+                    img: v.image_url,
+                    price: priceCheck
+                  });
+                }
+                
+                // db.favorites.add({
+                //   id: v.id,
+                //   name: v.name,
+                //   img: v.image_url,
+                //   price: priceCheck
+                // });
+                
+                // $("#addFav").append(clone);
+              })
+              
+              clone.find("#btnReviews").on('click', function(){
+                // console.log('click! ' + v.id)
+                $("#addRev").find($(".mdc-layout-grid__cell")).not("#template1").remove();
+                fetch('https://cors-anywhere.herokuapp.com/https://api.yelp.com/v3/businesses/'+ v.id +'/reviews', {
+                  method: 'GET',
+                    headers: {
+                      'authorization': 'Bearer Q513FUYfiOKc5fS17A6POOyJooFK43CFouknABObDLNmNiXEsyFvyxGR6FqaNrT-alI9WL5NioGP81rz0yWwaPs5MoFJ30GliWALCBpJofY9Nwp9PLiUffnRJGoaWnYx'
+                      // 'Access-Control-Allow-Origin':  'http://127.0.0.1:3000',
+                      // 'Access-Control-Allow-Methods': 'POST',
+                      // 'Access-Control-Allow-Headers': 'Content-Type, Authorization'
+          
+                    }
+                  }
+                ).then((res)=> res.json()).then((resJSON) => {
+                  // console.log('test1', resJSON)
+                  $.each(resJSON.reviews, function(i,item){
+                    console.log(item.text);
+                    console.log(v.name);
+                    var t = $("#template1").clone();
+                    t.find("#name").text(v.name);
+                    $("#addRev").append(t);
+                    t.removeClass("hidden");
+                    t.attr("id", "" + v.id + "rev");
+                    t.find("#rating").text(item.rating);
+                    t.find("#review").text(item.text);
+                    t.find("#review").attr("href", item.url)
+                    // t.find("#name").on('click',function(){
+                    //   t.remove();
+                    // });
+                    t.show();
+                  })
+                })
+                $(".screen").hide();
+                $("#Results").show();   
+              })
+              
+              $("#addHere").append(clone);
+              
+              var infowindow = new google.maps.InfoWindow({
+                content: "<p><strong>" + v.name + "</strong><ul><li>" + v.location.display_address[0] + "</li><li>" + v.display_phone + "</li></ul></p><br>"
+              });
+              
+              var coord = {lat: parseFloat(v.coordinates.latitude), lng: parseFloat(v.coordinates.longitude)};
+  
+              var marker = new google.maps.Marker({
+                position: coord,
+                map: map,
+                title: v.name
+              });
+              marker.addListener('click', function() {
+                if(iw){
+                  iw.close();
+                }
+                iw = infowindow;
+                infowindow.open(map, marker);
+              });
+              // infowindow.addListener('click', function(){
+              //   console.log('click! ' + v.id)
+              //   fetch('https://cors-anywhere.herokuapp.com/https://api.yelp.com/v3/businesses/'+ v.id +'/reviews', {
+              //     method: 'GET',
+              //       headers: {
+              //         'authorization': 'Bearer Q513FUYfiOKc5fS17A6POOyJooFK43CFouknABObDLNmNiXEsyFvyxGR6FqaNrT-alI9WL5NioGP81rz0yWwaPs5MoFJ30GliWALCBpJofY9Nwp9PLiUffnRJGoaWnYx'
+              //         // 'Access-Control-Allow-Origin':  'http://127.0.0.1:3000',
+              //         // 'Access-Control-Allow-Methods': 'POST',
+              //         // 'Access-Control-Allow-Headers': 'Content-Type, Authorization'
+          
+              //       }
+              //     }
+              //   ).then((res)=> res.json()).then((resJSON) => {
+              //     console.log('test1', resJSON)
+              //   })
+              // });
+            });
+          })
+          $(".delete").hide();
+          // fetch('https://cors-anywhere.herokuapp.com/https://api.yelp.com/v3/autocomplete?latitude='+ latitude+'&longitude='+longitude + '&text=port', {
+          //   method: 'GET',
+          //     headers: {
+          //       'authorization': 'Bearer Q513FUYfiOKc5fS17A6POOyJooFK43CFouknABObDLNmNiXEsyFvyxGR6FqaNrT-alI9WL5NioGP81rz0yWwaPs5MoFJ30GliWALCBpJofY9Nwp9PLiUffnRJGoaWnYx'
+          //       // 'Access-Control-Allow-Origin':  'http://127.0.0.1:3000',
+          //       // 'Access-Control-Allow-Methods': 'POST',
+          //       // 'Access-Control-Allow-Headers': 'Content-Type, Authorization'
+    
+          //     }
+          //   }
+          // ).then((res)=> res.json()).then((resJSON) => {
+          //   console.log('test1', resJSON)
+          // })
+
+    }
+  
     if('serviceWorker' in navigator) {
       navigator.serviceWorker.register('./sw.js', { scope: './' })
         .then(function(registration) {
@@ -233,39 +547,6 @@
     }
 
   </script>
-  <script>
-    $(document).ready(function(){
-      // $(".screen").hide();
-              
-      $(".starter").show();
-      
-      $(".mdc-list-item").on("click", function(){
-          
-          $(".screen").hide();
-          
-          var target = $(this).attr("href");
-          
-          $(target).show();
-          
-      });
-      
-      fetch('https://cors-anywhere.herokuapp.com/https://api.yelp.com/v3/businesses/search?location=12345', {
-        method: 'GET',
-          headers: {
-            'authorization': 'Bearer Q513FUYfiOKc5fS17A6POOyJooFK43CFouknABObDLNmNiXEsyFvyxGR6FqaNrT-alI9WL5NioGP81rz0yWwaPs5MoFJ30GliWALCBpJofY9Nwp9PLiUffnRJGoaWnYx'
-            // 'Access-Control-Allow-Origin':  'http://127.0.0.1:3000',
-            // 'Access-Control-Allow-Methods': 'POST',
-            // 'Access-Control-Allow-Headers': 'Content-Type, Authorization'
-
-          }
-        }
-      ).then((res)=> res.json()).then((resJSON) => {
-        console.log('test', resJSON)
-      })
-      
-    });
-              
-  </script>
   
   <script>
     
@@ -274,5 +555,9 @@
       document.getElementById('shrine-nav-menu').MDCTemporaryDrawer.open = true;
     });
   </script>
+  <script async defer
+  src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCstd0FNhQY-CPsiFshU1_gDvVz1aO1cgw&callback=getLocation">
+  </script>
 </body>
 </html>
+

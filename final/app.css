@@ -92,11 +92,11 @@ html, body {
   letter-spacing: .2em;
 }
 
-#shrine-products {
+#Resturants {
   --mdc-layout-grid-gutter: 8px;
 }
 
-#shrine-products .mdc-layout-grid__cell {
+#Resturants .mdc-layout-grid__cell {
   display: flex;
   justify-content: center;
 }
