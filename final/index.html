@@ -9,18 +9,11 @@
   <meta http-equiv="x-ua-compatible" content="ie=edge">
   <title>Resturants Selector</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <!--<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css">-->
   
   
   <script src="https://code.jquery.com/jquery-3.2.1.min.js" ></script>
-  <!--<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>-->
-  <!--<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js"></script>-->
-  <!--<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/js/bootstrap.min.js"></script>-->
   
-
-
   <!--Load the AJAX API-->
-  <!--<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>-->
   <link rel="icon" sizes="192x192" href="https://material.io/static/images/simple-lp/favicons/components-192x192.png">
   <link rel="shortcut icon" href="https://material.io/static/images/simple-lp/favicons/components-72x72.png">
 
@@ -31,10 +24,7 @@
   <link rel="stylesheet"
         href="https://unpkg.com/material-components-web@0.9.1/dist/material-components-web.min.css">
   <link rel="stylesheet" href="./app.css">
-  
-  <!--<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.4/jquery.min.js"></script>-->
-  <!--<script type="text/javascript" src="http://oauth.googlecode.com/svn/code/javascript/oauth.js"></script>-->
-  <!--<script type="text/javascript" src="http://oauth.googlecode.com/svn/code/javascript/sha1.js"></script>        -->
+
   <script src="https://unpkg.com/dexie@latest/dist/dexie.js"></script>
   
   <link rel="manifest" href="./manifest.json">
@@ -95,14 +85,6 @@
     
     <div class="mdc-toolbar-fixed-adjust screen" id="Results">
       <h3>Reviews</h3>
-      <!--<div class="mdc-layout-grid__cell">-->
-      <!--  <div class="mdc-card shrine-product-card">-->
-      <!--    <section class="mdc-card__primary">-->
-      <!--      <span class="mdc-card__title shrine-product-card__price">$20</span>-->
-      <!--    </section>-->
-      <!--    <img class="shrine-product-card__image" width="240" height="240" alt="Sunglasses" src="assets/sunnies.png">-->
-      <!--  </div>-->
-      <!--</div>-->
       <div class="mdc-card">
         <section class="mdc-card__primary">
           <h1 class="mdc-card__title mdc-card__title--large">Reviews</h1>
@@ -129,16 +111,6 @@
     </div>
     
     <div class="mdc-toolbar-fixed-adjust screen" id="Selection">
-      <!--<h3>Selection</h3>-->
-      <!--<div class="mdc-layout-grid__cell">-->
-      <!--  <div class="mdc-card shrine-product-card">-->
-      <!--    <section class="mdc-card__primary">-->
-      <!--      <span class="mdc-card__title shrine-product-card__price">$20</span>-->
-      <!--    </section>-->
-      <!--    <img class="shrine-product-card__image" width="240" height="240" alt="Sunglasses" src="assets/sunnies.png">-->
-      <!--  </div>-->
-      <!--</div>-->
-      <!--<p>Add Resturants from the Resturants (or Favorites) tab and then click the button below to select a resturant</p>-->
       <div class="mdc-card">
         <section class="mdc-card__primary">
           <h1 class="mdc-card__title mdc-card__title--large">Selection</h1>
@@ -172,9 +144,7 @@
     </div>
     
     <div class="mdc-toolbar-fixed-adjust screen starter" id="Resturants">
-      <!--<h3>Resturants</h3>-->
-      
-      <!--<p class="quote">Qutoe of the day: </p>-->
+
     <div class="mdc-card">
       <div class="mdc-card">
         <section class="mdc-card__primary">
@@ -192,7 +162,6 @@
         <h1 class="mdc-card__title mdc-card__title--large">Please wait, getting geolocation data</h1>
       </section>
     </div>
-      <!--<p class="delete">Please wait, getting geolocation data</p>-->
       <div class="mdc-layout-grid" id="addHere">
         <div class="mdc-layout-grid__cell hidden" id="template">
           <div class="mdc-card shrine-product-card">
@@ -254,7 +223,6 @@
         $("#addFav").append(clone);
         
         clone.find("#btnAdd").on('click', function(){
-          // console.log(v.id);
           if($("#addSel").find("#"+v.id).length == 0){
             var t = $("#template2").clone();
             t.find("#name").text(v.name);
@@ -266,23 +234,19 @@
         })
         
         clone.find("#btnReviews").on('click', function(){
-          // console.log('click! ' + v.id)
           $("#addRev").find($(".mdc-layout-grid__cell")).not("#template1").remove();
           fetch('https://cors-anywhere.herokuapp.com/https://api.yelp.com/v3/businesses/'+ v.id +'/reviews', {
             method: 'GET',
               headers: {
                 'authorization': 'Bearer Q513FUYfiOKc5fS17A6POOyJooFK43CFouknABObDLNmNiXEsyFvyxGR6FqaNrT-alI9WL5NioGP81rz0yWwaPs5MoFJ30GliWALCBpJofY9Nwp9PLiUffnRJGoaWnYx'
-                // 'Access-Control-Allow-Origin':  'http://127.0.0.1:3000',
-                // 'Access-Control-Allow-Methods': 'POST',
-                // 'Access-Control-Allow-Headers': 'Content-Type, Authorization'
     
               }
             }
           ).then((res)=> res.json()).then((resJSON) => {
             // console.log('test1', resJSON)
             $.each(resJSON.reviews, function(i,item){
-              console.log(item.text);
-              console.log(v.name);
+              // console.log(item.text);
+              // console.log(v.name);
               var t = $("#template1").clone();
               t.find("#name").text(v.name);
               $("#addRev").append(t);
@@ -291,9 +255,6 @@
               t.find("#rating").text(item.rating);
               t.find("#review").text(item.text);
               t.find("#review").attr("href", item.url)
-              // t.find("#name").on('click',function(){
-              //   t.remove();
-              // });
               t.show();
             })
           })
@@ -307,15 +268,13 @@
           $(".screen").hide();
           
           var target = $(this).attr("href");
-          // google.maps.event.trigger(map, 'resize');
           $(target).show();
           
       });
       
       $("#btnChoose").on('click', function(){
-        // console.log($(".countme").length - 1);
         var val = Math.floor(Math.random() * ($(".countme").length - 1) + 1);
-        console.log("val "+val);
+        // console.log("val "+val);
         $("#Selection").find("#name").removeClass("blue");
         $("#Selection").find("#name").eq(val).addClass("blue");
         
@@ -365,17 +324,12 @@
             method: 'GET',
               headers: {
                 'authorization': 'Bearer Q513FUYfiOKc5fS17A6POOyJooFK43CFouknABObDLNmNiXEsyFvyxGR6FqaNrT-alI9WL5NioGP81rz0yWwaPs5MoFJ30GliWALCBpJofY9Nwp9PLiUffnRJGoaWnYx'
-                // 'Access-Control-Allow-Origin':  'http://127.0.0.1:3000',
-                // 'Access-Control-Allow-Methods': 'POST',
-                // 'Access-Control-Allow-Headers': 'Content-Type, Authorization'
     
               }
             }
           ).then((res)=> res.json()).then((resJSON) => {
             console.log('test', resJSON)
             $.each(resJSON.businesses, function(i,v){
-              // console.log(v);
-              // $("body").append("<p><strong>" + v.name + "</strong><ul><li>" + v.location.display_address[0] + "</li><li>" + v.display_phone + "</li></ul></p><br>");
               var clone = $("#template").clone();
               var priceCheck = v.price;
               if(v.price){
@@ -390,25 +344,19 @@
               clone.attr("id", "" + v.id);
               clone.find(".mdc-card img").attr("src", v.image_url);
               clone.show();
-              // clone.find('#btnAdd').attr("id", "#btnAdd"+v.id)
               
               clone.find("#btnAdd").on('click', function(){
-                // console.log(v.id);
                 if($("#addSel").find("#"+v.id+ "sel").length == 0){
                   var t = $("#template2").clone();
                   t.find("#name").text(v.name);
                   $("#addSel").append(t);
                   t.removeClass("hidden");
                   t.attr("id", "" + v.id + "sel");
-                  // t.find("#name").on('click',function(){
-                  //   t.remove();
-                  // });
                   t.show();
                 }
               })
               
               clone.find("#btnFav").on('click', function(){
-                // $("#addFav").append(clone.clone());
                 var c = clone.clone();
                 c.find("#btnAdd").on('click', function(){
                   if($("#addSel").find("#"+v.id).length == 0){
@@ -420,9 +368,6 @@
                     t.show();
                   }
                 });
-                // if($("#addFav").find("#"+v.id).length == 0){
-                //   $("#addFav").append(c);
-                // }
                 if($("#addFav").find("#"+v.id).length == 0){
                   console.log("favoriting")
                   $("#addFav").append(c);
@@ -434,14 +379,6 @@
                   });
                 }
                 
-                // db.favorites.add({
-                //   id: v.id,
-                //   name: v.name,
-                //   img: v.image_url,
-                //   price: priceCheck
-                // });
-                
-                // $("#addFav").append(clone);
               })
               
               clone.find("#btnReviews").on('click', function(){
@@ -451,17 +388,13 @@
                   method: 'GET',
                     headers: {
                       'authorization': 'Bearer Q513FUYfiOKc5fS17A6POOyJooFK43CFouknABObDLNmNiXEsyFvyxGR6FqaNrT-alI9WL5NioGP81rz0yWwaPs5MoFJ30GliWALCBpJofY9Nwp9PLiUffnRJGoaWnYx'
-                      // 'Access-Control-Allow-Origin':  'http://127.0.0.1:3000',
-                      // 'Access-Control-Allow-Methods': 'POST',
-                      // 'Access-Control-Allow-Headers': 'Content-Type, Authorization'
-          
                     }
                   }
                 ).then((res)=> res.json()).then((resJSON) => {
                   // console.log('test1', resJSON)
                   $.each(resJSON.reviews, function(i,item){
-                    console.log(item.text);
-                    console.log(v.name);
+                    // console.log(item.text);
+                    // console.log(v.name);
                     var t = $("#template1").clone();
                     t.find("#name").text(v.name);
                     $("#addRev").append(t);
@@ -469,10 +402,6 @@
                     t.attr("id", "" + v.id + "rev");
                     t.find("#rating").text(item.rating);
                     t.find("#review").text(item.text);
-                    t.find("#review").attr("href", item.url)
-                    // t.find("#name").on('click',function(){
-                    //   t.remove();
-                    // });
                     t.show();
                   })
                 })
@@ -500,39 +429,9 @@
                 iw = infowindow;
                 infowindow.open(map, marker);
               });
-              // infowindow.addListener('click', function(){
-              //   console.log('click! ' + v.id)
-              //   fetch('https://cors-anywhere.herokuapp.com/https://api.yelp.com/v3/businesses/'+ v.id +'/reviews', {
-              //     method: 'GET',
-              //       headers: {
-              //         'authorization': 'Bearer Q513FUYfiOKc5fS17A6POOyJooFK43CFouknABObDLNmNiXEsyFvyxGR6FqaNrT-alI9WL5NioGP81rz0yWwaPs5MoFJ30GliWALCBpJofY9Nwp9PLiUffnRJGoaWnYx'
-              //         // 'Access-Control-Allow-Origin':  'http://127.0.0.1:3000',
-              //         // 'Access-Control-Allow-Methods': 'POST',
-              //         // 'Access-Control-Allow-Headers': 'Content-Type, Authorization'
-          
-              //       }
-              //     }
-              //   ).then((res)=> res.json()).then((resJSON) => {
-              //     console.log('test1', resJSON)
-              //   })
-              // });
             });
           })
           $(".delete").hide();
-          // fetch('https://cors-anywhere.herokuapp.com/https://api.yelp.com/v3/autocomplete?latitude='+ latitude+'&longitude='+longitude + '&text=port', {
-          //   method: 'GET',
-          //     headers: {
-          //       'authorization': 'Bearer Q513FUYfiOKc5fS17A6POOyJooFK43CFouknABObDLNmNiXEsyFvyxGR6FqaNrT-alI9WL5NioGP81rz0yWwaPs5MoFJ30GliWALCBpJofY9Nwp9PLiUffnRJGoaWnYx'
-          //       // 'Access-Control-Allow-Origin':  'http://127.0.0.1:3000',
-          //       // 'Access-Control-Allow-Methods': 'POST',
-          //       // 'Access-Control-Allow-Headers': 'Content-Type, Authorization'
-    
-          //     }
-          //   }
-          // ).then((res)=> res.json()).then((resJSON) => {
-          //   console.log('test1', resJSON)
-          // })
-
     }
   
     if('serviceWorker' in navigator) {

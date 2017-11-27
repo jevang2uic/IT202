@@ -1,0 +1,36 @@
+{
+  "name": "Resturants Selector",
+  "short_name": "Resturants Selector",
+  "icons": [{
+        "src": "https://material.io/static/images/simple-lp/favicons/components-128x128.png",
+        "type": "image/png",
+        "sizes": "128x128"
+      }, {
+        "src": "https://material.io/static/images/simple-lp/favicons/components-152x152.png",
+        "type": "image/png",
+        "sizes": "152x152"
+      }, {
+        "src": "https://material.io/static/images/simple-lp/favicons/components-144x144.png",
+        "type": "image/png",
+        "sizes": "144x144"
+      }, {
+        "src": "https://material.io/static/images/simple-lp/favicons/components-192x192.png",
+        "type": "image/png",
+        "sizes": "192x192"
+      },
+      {
+        "src": "https://material.io/static/images/simple-lp/favicons/components-256x256.png",
+        "type": "image/png",
+        "sizes": "256x256"
+      },
+      {
+        "src": "https://material.io/static/images/simple-lp/favicons/components-512x512.png",
+        "type": "image/png",
+        "sizes": "512x512"
+      }],
+  "start_url": "/?homescreen=1",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#2196F3",
+  "theme_color": "#2196F3"
+}
