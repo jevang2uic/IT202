@@ -64,7 +64,7 @@
            data-mdc-auto-init="MDCRipple"
            data-mdc-ripple-is-unbounded>menu</a>
         <h1 id="shrine-logo"          
-            class="mdc-toolbar__title"><span>Shrine</span></h1>
+            class="mdc-toolbar__title"><span>Random Resturant Roulette</span></h1>
       </section>
     </div>
   </header>
@@ -362,18 +362,46 @@
               })
               
               clone.find("#btnFav").on('click', function(){
-                var c = clone.clone();
-                c.find("#btnAdd").on('click', function(){
-                  if($("#addSel").find("#"+v.id).length == 0){
-                    var t = $("#template2").clone();
-                    t.find("#name").text(v.name);
-                    $("#addSel").append(t);
-                    t.removeClass("hidden");
-                    t.attr("id", "" + v.id);
-                    t.show();
-                  }
-                });
                 if($("#addFav").find("#"+v.id).length == 0){
+                  var c = clone.clone();
+                  c.find("#btnAdd").on('click', function(){
+                    if($("#addSel").find("#"+v.id).length == 0){
+                      var t = $("#template2").clone();
+                      t.find("#name").text(v.name);
+                      $("#addSel").append(t);
+                      t.removeClass("hidden");
+                      t.attr("id", "" + v.id);
+                      t.show();
+                    }
+                  });
+                  c.find("#btnReviews").on('click', function(){
+                    // console.log('click! ' + v.id)
+                    $("#addRev").find($(".mdc-layout-grid__cell")).not("#template1").remove();
+                    fetch('https://cors-anywhere.herokuapp.com/https://api.yelp.com/v3/businesses/'+ v.id +'/reviews', {
+                      method: 'GET',
+                        headers: {
+                          'authorization': 'Bearer Q513FUYfiOKc5fS17A6POOyJooFK43CFouknABObDLNmNiXEsyFvyxGR6FqaNrT-alI9WL5NioGP81rz0yWwaPs5MoFJ30GliWALCBpJofY9Nwp9PLiUffnRJGoaWnYx'
+                        }
+                      }
+                    ).then((res)=> res.json()).then((resJSON) => {
+                      // console.log('test1', resJSON)
+                      $.each(resJSON.reviews, function(i,item){
+                        // console.log(item.text);
+                        // console.log(v.name);
+                        var t = $("#template1").clone();
+                        t.find("#name").text(v.name);
+                        $("#addRev").append(t);
+                        t.removeClass("hidden");
+                        t.attr("id", "" + v.id + "rev");
+                        t.find("#rating").text(item.rating);
+                        t.find("#review").text(item.text);
+                        t.show();
+                      })
+                    })
+                    $(".screen").hide();
+                    $("#Results").show();   
+                  })
+                // if($("#addFav").find("#"+v.id).length == 0){
                   console.log("favoriting")
                   $("#addFav").append(c);
                   db.favorites.add({

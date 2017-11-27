@@ -32,7 +32,7 @@ html, body {
 }
 
 #shrine-logo {
-  background: url(assets/logo.png) left center no-repeat;
+  /*background: url(assets/logo.png) left center no-repeat;*/
   background-size: contain;
   width: 100%;
   height: 100%;
@@ -73,7 +73,7 @@ html, body {
 }
 
 #shrine-nav-menu .mdc-temporary-drawer__header {
-  background: url(assets/logo.png) 32px 32px no-repeat;
+  /*background: url(assets/logo.png) 32px 32px no-repeat;*/
   background-size: 30%;
 }
 
