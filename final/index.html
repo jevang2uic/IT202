@@ -97,8 +97,10 @@
       <div class="mdc-card">
         <section class="mdc-card__primary">
           <h1 class="mdc-card__title mdc-card__title--large">Reviews</h1>
+          <h2 class="mdc-card__subtitle">In the Resturants (or Favorites) tab click on review to show reviews for that resturant</h2>
         </section>
       </div>
+      
       <div class="mdc-layout-grid" id="addRev">
         <div class="mdc-layout-grid__cell hidden" id="template1">
           <div class="mdc-card shrine-product-card">
@@ -133,6 +135,7 @@
       </div>
       
       <button class="mdc-button mdc-button--raised" data-mdc-auto-init="MDCRipple" id='btnChoose'>Choose Resturant</button>
+      <button class="mdc-button mdc-button--raised" data-mdc-auto-init="MDCRipple" id='btnClear'>Clear Selection</button>
       <div class="mdc-layout-grid" id="addSel">
         <div class="mdc-layout-grid__cell hidden countme" id="template2">
           <div class="mdc-card shrine-product-card">
@@ -158,19 +161,18 @@
     </div>
     
     <div class="mdc-toolbar-fixed-adjust screen starter" id="Resturants">
-
     <div class="mdc-card">
-      <div class="mdc-card">
-        <section class="mdc-card__primary">
-          <h1 class="mdc-card__title mdc-card__title--large">Resturants</h1>
-        </section>
-      </div>
-      
       <section class="mdc-card__primary">
-        <h1 class="mdc-card__title mdc-card__title--large">Qutoe of the day:</h1>
+        <h1 class="mdc-card__title mdc-card__title--large">Resturants</h1>
+      </section>
+    </div>
+    <div class="mdc-card">
+      <section class="mdc-card__primary">
+        <h1 class="mdc-card__title mdc-card__title--large">Quote of the day:</h1>
         <h2 class="mdc-card__subtitle quote"></h2>
       </section>
     </div>
+    <button class="mdc-button mdc-button--raised" data-mdc-auto-init="MDCRipple" id='btnSearch'>Search Resturants in Area</button>
     <div class="mdc-card delete">
       <section class="mdc-card__primary">
         <h1 class="mdc-card__title mdc-card__title--large">Please wait, getting geolocation data</h1>
@@ -213,6 +215,7 @@
   
     $(document).ready(function(){
       // $(".screen").hide();
+      $(".delete").hide();
               
       $.get("https://quotes.rest/qod.json", function(response){
         currentQuote = response.contents.quotes[0];
@@ -246,6 +249,11 @@
             t.show();
           }
         })
+        clone.find("#btnFav").text("Remove")
+        clone.find("#btnFav").on('click', function(){
+          db.favorites.delete(v.id);
+          clone.remove();
+        });
         
         clone.find("#btnReviews").on('click', function(){
           $("#addRev").find($(".mdc-layout-grid__cell")).not("#template1").remove();
@@ -293,6 +301,17 @@
         $("#Selection").find("#name").eq(val).addClass("blue");
         
       })
+      
+      $("#btnClear").on('click', function(){
+        $(".countme").not("#template2").remove();
+      })
+      
+      $('#btnSearch').on('click', function(){
+        $(".delete").show();
+        getLocation();
+        $("#btnSearch").hide();
+      })
+      
       
     });
   
@@ -382,6 +401,11 @@
                       t.attr("id", "" + v.id);
                       t.show();
                     }
+                  });
+                  c.find("#btnFav").text("Remove")
+                  c.find("#btnFav").on('click', function(){
+                    db.favorites.delete(v.id);
+                    c.remove();
                   });
                   c.find("#btnReviews").on('click', function(){
                     // console.log('click! ' + v.id)
@@ -497,7 +521,7 @@
     });
   </script>
   <script async defer
-  src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCstd0FNhQY-CPsiFshU1_gDvVz1aO1cgw&callback=getLocation">
+  src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCstd0FNhQY-CPsiFshU1_gDvVz1aO1cgw">
   </script>
 </body>
 </html>
