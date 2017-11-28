@@ -242,7 +242,7 @@
             t.find("#name").text(v.name);
             $("#addSel").append(t);
             t.removeClass("hidden");
-            t.attr("id", "" + v.id + "sel");
+            t.attr("id", "" + v.id);
             t.show();
           }
         })
@@ -360,12 +360,12 @@
               clone.show();
               
               clone.find("#btnAdd").on('click', function(){
-                if($("#addSel").find("#"+v.id+ "sel").length == 0){
+                if($("#addSel").find("#"+v.id).length == 0){
                   var t = $("#template2").clone();
                   t.find("#name").text(v.name);
                   $("#addSel").append(t);
                   t.removeClass("hidden");
-                  t.attr("id", "" + v.id + "sel");
+                  t.attr("id", "" + v.id);
                   t.show();
                 }
               })
