@@ -1,7 +1,7 @@
 var dataCacheName = 'data';
 
 
-var cacheName = 'test1';
+var cacheName = 'RRRv1';
 var filesToCache = [
   './',
   './index.html',
