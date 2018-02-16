@@ -166,12 +166,6 @@
         <h1 class="mdc-card__title mdc-card__title--large">Resturants</h1>
       </section>
     </div>
-    <div class="mdc-card">
-      <section class="mdc-card__primary">
-        <h1 class="mdc-card__title mdc-card__title--large">Quote of the day:</h1>
-        <h2 class="mdc-card__subtitle quote"></h2>
-      </section>
-    </div>
     <button class="mdc-button mdc-button--raised" data-mdc-auto-init="MDCRipple" id='btnSearch'>Search Resturants in Area</button>
     <div class="mdc-card delete">
       <section class="mdc-card__primary">
@@ -196,12 +190,9 @@
     </div>
   </main>
       
-  <script src="https://unpkg.com/material-components-web@latest/dist/material-components-web.min.js"></script>
+  <script src="https://unpkg.com/material-components-web@0.9.1/dist/material-components-web.min.js"></script>
   <script>window.mdc.autoInit();</script>
   <script>
-  
-    var currentQuote = {};
-
     var db = new Dexie('FavList');
     
   	// Define a schema
@@ -216,13 +207,6 @@
     $(document).ready(function(){
       // $(".screen").hide();
       $(".delete").hide();
-              
-      $.get("https://quotes.rest/qod.json", function(response){
-        currentQuote = response.contents.quotes[0];
-        
-        $(".quote").append(currentQuote.quote + '<br>');
-        
-       });
       
       $(".starter").show();
       
@@ -496,8 +480,8 @@
                 infowindow.open(map, marker);
               });
             });
+            $(".delete").hide();
           })
-          $(".delete").hide();
     }
   
     if('serviceWorker' in navigator) {
